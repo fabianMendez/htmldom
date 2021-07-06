@@ -59,19 +59,24 @@ func GetElementByID(node *html.Node, id string) *html.Node {
 	})
 }
 
+// ContainsClass returns whether the node contains the specified class
+func ContainsClass(n *html.Node, class string) bool {
+	if n.Type == html.ElementNode {
+		elmClassAttr := GetAttribute(n, "class")
+		elmClasses := strings.Split(elmClassAttr, " ")
+		for _, elmClass := range elmClasses {
+			if elmClass == class {
+				return true
+			}
+		}
+	}
+
+	return false
+}
+
 // GetAllElementsByClass returns every node that has the specified class
 func GetAllElementsByClass(node *html.Node, class string) []*html.Node {
 	return GetAllElementsMatching(node, func(n *html.Node) bool {
-		if n.Type == html.ElementNode {
-			elmClassAttr := GetAttribute(n, "class")
-			elmClasses := strings.Split(elmClassAttr, " ")
-			for _, elmClass := range elmClasses {
-				if elmClass == class {
-					return true
-				}
-			}
-		}
-
-		return false
+		return ContainsClass(n, class)
 	})
 }
