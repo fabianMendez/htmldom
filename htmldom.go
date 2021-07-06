@@ -87,3 +87,21 @@ func GetElementByClass(node *html.Node, class string) *html.Node {
 		return ContainsClass(n, class)
 	})
 }
+
+// GetInnerText returns the inner text of the node
+func GetInnerText(n *html.Node) string {
+	str := ""
+
+	for c := n.FirstChild; c != nil; c = c.NextSibling {
+		if c.Type == html.TextNode {
+			str += c.Data
+		} else if c.Type == html.ElementNode && c.Data == "br" {
+			str += "\n"
+			// } else {
+		} else if c.Type == html.ElementNode && c.Data != "script" {
+			str += GetInnerText(c)
+		}
+	}
+
+	return str
+}
