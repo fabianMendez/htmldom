@@ -63,8 +63,13 @@ func GetElementByID(node *html.Node, id string) *html.Node {
 func GetAllElementsByClass(node *html.Node, class string) []*html.Node {
 	return GetAllElementsMatching(node, func(n *html.Node) bool {
 		if n.Type == html.ElementNode {
-			elmClass := GetAttribute(n, "class")
-			return strings.Contains(elmClass, class)
+			elmClassAttr := GetAttribute(n, "class")
+			elmClasses := strings.Split(elmClassAttr, " ")
+			for _, elmClass := range elmClasses {
+				if elmClass == class {
+					return true
+				}
+			}
 		}
 
 		return false
