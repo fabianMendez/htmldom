@@ -17,7 +17,7 @@ func GetAttribute(n *html.Node, attrKey string) string {
 	return ""
 }
 
-// GetElementMatching returns the firs node that matches the given predicate
+// GetElementMatching returns the first node that matches the given predicate
 func GetElementMatching(node *html.Node, fn func(*html.Node) bool) *html.Node {
 	if fn(node) {
 		return node
@@ -77,6 +77,13 @@ func ContainsClass(n *html.Node, class string) bool {
 // GetAllElementsByClass returns every node that has the specified class
 func GetAllElementsByClass(node *html.Node, class string) []*html.Node {
 	return GetAllElementsMatching(node, func(n *html.Node) bool {
+		return ContainsClass(n, class)
+	})
+}
+
+// GetElementByClass returns the first node having the specified class
+func GetElementByClass(node *html.Node, class string) *html.Node {
+	return GetElementMatching(node, func(n *html.Node) bool {
 		return ContainsClass(n, class)
 	})
 }
