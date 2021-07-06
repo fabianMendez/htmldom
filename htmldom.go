@@ -1,6 +1,10 @@
 package htmldom
 
-import "golang.org/x/net/html"
+import (
+	"strings"
+
+	"golang.org/x/net/html"
+)
 
 // GetAttribute returns the value for the specified attribute of the given node
 func GetAttribute(n *html.Node, attrKey string) string {
@@ -26,6 +30,21 @@ func GetElementMatching(node *html.Node, fn func(*html.Node) bool) *html.Node {
 	}
 
 	return nil
+
+}
+
+func GetAllElementsMatching(node *html.Node, fn func(*html.Node) bool) []*html.Node {
+	var elms []*html.Node
+
+	if fn(node) {
+		elms = append(elms, node)
+	}
+
+	for child := node.FirstChild; child != nil; child = child.NextSibling {
+		elms = append(elms, GetAllElementsMatching(child, fn)...)
+	}
+
+	return elms
 }
 
 // GetElementByID returns the node with the specified id or nil if it can not be found
@@ -34,6 +53,18 @@ func GetElementByID(node *html.Node, id string) *html.Node {
 		if n.Type == html.ElementNode {
 			elmID := GetAttribute(n, "id")
 			return elmID == id
+		}
+
+		return false
+	})
+}
+
+// GetAllElementsByClass returns every node that has the specified class
+func GetAllElementsByClass(node *html.Node, class string) []*html.Node {
+	return GetAllElementsMatching(node, func(n *html.Node) bool {
+		if n.Type == html.ElementNode {
+			elmClass := GetAttribute(n, "class")
+			return strings.Contains(elmClass, class)
 		}
 
 		return false
