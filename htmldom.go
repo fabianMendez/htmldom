@@ -97,7 +97,7 @@ func GetInnerText(n *html.Node) string {
 			str += c.Data
 		} else if IsTag(c, "br") {
 			str += "\n"
-		} else if IsTag(c, "script") {
+		} else if !IsTag(c, "script") {
 			str += GetInnerText(c)
 		}
 	}
