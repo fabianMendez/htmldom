@@ -81,7 +81,7 @@ func GetAllElementsByClass(node *html.Node, class string) []*html.Node {
 	})
 }
 
-// GetElementByClass returns the first node having the specified class
+// GetElementByClass returns the first node containing the specified class
 func GetElementByClass(node *html.Node, class string) *html.Node {
 	return GetElementMatching(node, func(n *html.Node) bool {
 		return ContainsClass(n, class)
@@ -95,13 +95,17 @@ func GetInnerText(n *html.Node) string {
 	for c := n.FirstChild; c != nil; c = c.NextSibling {
 		if c.Type == html.TextNode {
 			str += c.Data
-		} else if c.Type == html.ElementNode && c.Data == "br" {
+		} else if IsTag(c, "br") {
 			str += "\n"
-			// } else {
-		} else if c.Type == html.ElementNode && c.Data != "script" {
+		} else if IsTag(c, "script") {
 			str += GetInnerText(c)
 		}
 	}
 
 	return str
+}
+
+// IsTag returns true if the node is of the given tag
+func IsTag(node *html.Node, tag string) bool {
+	return node.Type == html.ElementNode && node.Data == tag
 }
