@@ -116,3 +116,10 @@ func GetAllElemenstByTag(node *html.Node, tag string) []*html.Node {
 		return IsTag(n, tag)
 	})
 }
+
+// GetElementByTag returns the first element of the given tag
+func GetElementByTag(node *html.Node, tag string) *html.Node {
+	return GetElementMatching(node, func(n *html.Node) bool {
+		return IsTag(n, tag)
+	})
+}
