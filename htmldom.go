@@ -109,3 +109,10 @@ func GetInnerText(n *html.Node) string {
 func IsTag(node *html.Node, tag string) bool {
 	return node.Type == html.ElementNode && node.Data == tag
 }
+
+// GetAllElemenstByTag returns all the nodes of the given tag
+func GetAllElemenstByTag(node *html.Node, tag string) []*html.Node {
+	return GetAllElementsMatching(node, func(n *html.Node) bool {
+		return IsTag(n, tag)
+	})
+}
