@@ -139,3 +139,11 @@ func GetAllInputs(n *html.Node) url.Values {
 
 	return values
 }
+
+// ParseForm returns method, action and inputs of the given form
+func ParseForm(form *html.Node) (string, string, url.Values) {
+	method := GetAttribute(form, "method")
+	action := GetAttribute(form, "action")
+	values := GetAllInputs(form)
+	return method, action, values
+}
