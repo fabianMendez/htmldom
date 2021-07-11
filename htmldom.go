@@ -1,6 +1,7 @@
 package htmldom
 
 import (
+	"net/url"
 	"strings"
 
 	"golang.org/x/net/html"
@@ -122,4 +123,19 @@ func GetElementByTag(node *html.Node, tag string) *html.Node {
 	return GetElementMatching(node, func(n *html.Node) bool {
 		return IsTag(n, tag)
 	})
+}
+
+// GetAllInputs returns all inputs inside the given node
+func GetAllInputs(n *html.Node) url.Values {
+	values := url.Values{}
+
+	inputs := GetAllElementsByTag(n, "input")
+
+	for _, input := range inputs {
+		name := GetAttribute(input, "name")
+		value := GetAttribute(input, "value")
+		values.Add(name, value)
+	}
+
+	return values
 }
